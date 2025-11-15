@@ -1,0 +1,4 @@
+{
+  "name": "I Simposio Internacional sobre Biodiversidad y Biotecnología Vegetal",
+  "description": "Una aplicación web con un diseño limpio y natural para la inscripción al simposio. La página de inicio presenta tarjetas informativas y elementos visuales que se animan al hacer scroll. Creado con React y Tailwind CSS."
+}
