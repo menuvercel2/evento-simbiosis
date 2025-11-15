@@ -56,22 +56,32 @@ function validateRegistrationData(data: any): { valid: boolean; errors: string[]
  * Handler principal para el registro de inscripciones
  */
 export default async function handler(request: VercelRequest, response: VercelResponse) {
+  console.log('🚀 === INICIO DE PETICIÓN DE REGISTRO ===');
+  console.log('📋 Método:', request.method);
+  console.log('🌐 URL:', request.url);
+
   // Solo permitir solicitudes POST
   if (request.method !== 'POST') {
+    console.log('❌ Método no permitido:', request.method);
     response.setHeader('Allow', ['POST']);
-    return response.status(405).json({ 
+    return response.status(405).json({
       success: false,
-      message: `Método ${request.method} no permitido` 
+      message: `Método ${request.method} no permitido`
     });
   }
 
   try {
+    console.log('📦 Body recibido (tipo):', typeof request.body);
+    console.log('📦 Body recibido (contenido):', JSON.stringify(request.body, null, 2));
+
     // Parsear el body
     let body: any;
-    
+
     if (typeof request.body === 'string') {
+      console.log('🔄 Parseando body como string...');
       body = JSON.parse(request.body);
     } else {
+      console.log('✅ Body ya es objeto');
       body = request.body;
     }
 
@@ -85,7 +95,18 @@ export default async function handler(request: VercelRequest, response: VercelRe
       work_summary
     } = body;
 
+    console.log('📝 Datos extraídos:', {
+      full_name,
+      email,
+      institution,
+      phone,
+      commission_id,
+      work_title: work_title?.substring(0, 50),
+      work_summary: work_summary?.substring(0, 50) + '...'
+    });
+
     // Validar datos
+    console.log('🔍 Iniciando validación...');
     const validation = validateRegistrationData({
       full_name,
       email,
@@ -96,39 +117,59 @@ export default async function handler(request: VercelRequest, response: VercelRe
       work_summary
     });
 
+    console.log('✔️ Resultado de validación:', validation);
+
     if (!validation.valid) {
-      return response.status(400).json({ 
+      console.log('❌ Validación fallida:', validation.errors);
+      return response.status(400).json({
         success: false,
         message: 'Errores de validación',
-        errors: validation.errors 
+        errors: validation.errors
       });
     }
 
     // Verificar si la comisión existe
+    console.log('🔍 Verificando comisión con ID:', commission_id);
     const commissionCheck = await sql`
       SELECT id FROM commissions WHERE id = ${commission_id}
     `;
+    console.log('📊 Resultado de comisión:', commissionCheck.rows);
 
     if (commissionCheck.rows.length === 0) {
-      return response.status(400).json({ 
+      console.log('❌ Comisión no encontrada');
+      return response.status(400).json({
         success: false,
-        message: 'La comisión seleccionada no existe.' 
+        message: 'La comisión seleccionada no existe.'
       });
     }
 
     // Verificar si el email ya está registrado
+    console.log('🔍 Verificando email duplicado:', email.toLowerCase());
     const emailCheck = await sql`
       SELECT id FROM registrations WHERE email = ${email.toLowerCase()}
     `;
+    console.log('📊 Resultado de email check:', emailCheck.rows);
 
     if (emailCheck.rows.length > 0) {
-      return response.status(409).json({ 
+      console.log('❌ Email ya registrado');
+      return response.status(409).json({
         success: false,
-        message: 'Este email ya está registrado. Por favor, use otro email.' 
+        message: 'Este email ya está registrado. Por favor, use otro email.'
       });
     }
 
     // Insertar el registro en la base de datos
+    console.log('💾 Insertando registro en la base de datos...');
+    console.log('💾 Datos a insertar:', {
+      full_name: full_name.trim(),
+      email: email.toLowerCase().trim(),
+      institution: institution.trim(),
+      phone: phone?.trim() || null,
+      commission_id,
+      work_title: work_title.trim(),
+      work_summary_length: work_summary.trim().length
+    });
+
     const result = await sql`
       INSERT INTO registrations (
         full_name, 
@@ -151,6 +192,8 @@ export default async function handler(request: VercelRequest, response: VercelRe
       RETURNING id, full_name, email, created_at
     `;
 
+    console.log('✅ Resultado del INSERT:', result.rows);
+
     const insertedRecord = result.rows[0];
 
     console.log('✅ Registro exitoso:', {
@@ -160,7 +203,8 @@ export default async function handler(request: VercelRequest, response: VercelRe
     });
 
     // Enviar respuesta de éxito
-    return response.status(201).json({ 
+    console.log('📤 Enviando respuesta de éxito');
+    return response.status(201).json({
       success: true,
       message: 'Inscripción registrada con éxito.',
       data: {
@@ -172,33 +216,49 @@ export default async function handler(request: VercelRequest, response: VercelRe
     });
 
   } catch (error: any) {
-    console.error('❌ Error al procesar la inscripción:', error);
+    console.error('❌❌❌ ERROR CAPTURADO ❌❌❌');
+    console.error('Tipo de error:', error.constructor.name);
+    console.error('Mensaje:', error.message);
+    console.error('Stack:', error.stack);
+    console.error('Error completo:', JSON.stringify(error, null, 2));
+
+    if (error.code) {
+      console.error('🔴 Código de error de BD:', error.code);
+      console.error('🔴 Detalle:', error.detail);
+      console.error('🔴 Hint:', error.hint);
+    }
 
     // Error de sintaxis JSON
     if (error instanceof SyntaxError) {
-      return response.status(400).json({ 
+      console.log('❌ Error de sintaxis JSON');
+      return response.status(400).json({
         success: false,
-        message: 'Cuerpo de la solicitud mal formado.' 
+        message: 'Cuerpo de la solicitud mal formado.'
       });
     }
 
     // Error de base de datos
     if (error.code) {
       console.error('Código de error de BD:', error.code);
-      
+
       // Violación de constraint único (email duplicado)
       if (error.code === '23505') {
-        return response.status(409).json({ 
+        console.log('❌ Violación de constraint único');
+        return response.status(409).json({
           success: false,
-          message: 'Este email ya está registrado.' 
+          message: 'Este email ya está registrado.'
         });
       }
     }
 
     // Error genérico del servidor
-    return response.status(500).json({ 
+    console.log('❌ Retornando error 500 genérico');
+    return response.status(500).json({
       success: false,
-      message: 'Error interno del servidor. Por favor, intente nuevamente.' 
+      message: 'Error interno del servidor. Por favor, intente nuevamente.',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
+  } finally {
+    console.log('🏁 === FIN DE PETICIÓN DE REGISTRO ===\n');
   }
 }
