@@ -1,18 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { sql } from '@vercel/postgres';
 
-/**
- * Interface para los datos de registro
- */
-interface RegistrationData {
-  full_name: string;
-  email: string;
-  institution: string;
-  phone?: string;
-  commission_id: number;
-  work_title: string;
-  work_summary: string;
-}
 
 /**
  * Valida el formato del email
