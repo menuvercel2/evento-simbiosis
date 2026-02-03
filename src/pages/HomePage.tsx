@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { CalendarIcon, LocationMarkerIcon, AwardIcon, ChevronDownIcon, MailIcon, DevicePhoneMobileIcon, InstagramIcon } from '../components/icons/Icons';
+import { CalendarIcon, LocationMarkerIcon, AwardIcon, ChevronDownIcon, MailIcon, DevicePhoneMobileIcon, InstagramIcon, LeafIcon, GlobeIcon, BeakerIcon, BookOpenIcon, AcademicCapIcon, TrendingUpIcon, ChainIcon, BugIcon } from '../components/icons/Icons';
 import AnimatedSection from '../components/AnimatedSection';
 import CountdownTimer from '../components/CountdownTimer';
 
@@ -22,16 +22,16 @@ const InfoCard: React.FC<{ icon: React.ElementType, children: React.ReactNode, t
 const Accordion: React.FC<{ title: string, children: React.ReactNode }> = ({ title, children }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
-        <div className="border border-gray-200/80 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <div className="border border-gray-200/80 rounded-lg shadow-sm hover:shadow-md transition-shadow bg-white">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex justify-between items-center p-5 font-semibold text-dark-text hover:bg-gray-50 transition-colors rounded-lg"
+                className="w-full flex justify-between items-center p-5 font-semibold text-dark-text hover:bg-gray-50 transition-colors rounded-lg text-left"
             >
-                <span>{title}</span>
+                <span className="text-lg">{title}</span>
                 <ChevronDownIcon className={`w-5 h-5 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
             </button>
-            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96' : 'max-h-0'}`}>
-                <div className="p-5 pt-0 text-gray-600">
+            <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className="p-5 pt-2 text-gray-600 border-t border-gray-100">
                     {children}
                 </div>
             </div>
@@ -54,31 +54,11 @@ const HomePage: React.FC = () => {
                 <link rel="canonical" href="https://tusitio.com" />
             </Helmet>
 
-            {/* Sticky Header */}
-            <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 py-3 px-4 sm:px-6 lg:px-8 hidden md:block shadow-sm">
-                <div className="max-w-7xl mx-auto flex justify-between items-center">
-                    <img
-                        src="/logo.png"
-                        alt="Logo Simposio Biodiversidad"
-                        className="h-10 w-auto object-contain"
-                    />
-                    <nav className="flex items-center gap-6">
-                        <a href="#comisiones" className="text-gray-700 hover:text-primary-gold transition-colors font-medium">Comisiones</a>
-                        <a href="#patrocinadores" className="text-gray-700 hover:text-primary-gold transition-colors font-medium">Patrocinadores</a>
-                        <a href="#contacto" className="text-gray-700 hover:text-primary-gold transition-colors font-medium">Contacto</a>
-                        <Link
-                            to="/register"
-                            className="bg-primary-gold text-white font-semibold px-6 py-2 rounded-full hover:bg-yellow-600 transition-all transform hover:scale-105"
-                        >
-                            Inscríbete
-                        </Link>
-                    </nav>
-                </div>
-            </div>
+
 
             {/* Hero Section */}
             <section
-                className="min-h-screen -mx-4 sm:-mx-6 lg:-mx-8 flex flex-col justify-center items-center text-center p-4 sm:p-6 lg:p-8 relative overflow-hidden bg-white scroll-mt-20 list-none"
+                className="min-h-screen -mx-4 sm:-mx-6 lg:-mx-8 flex flex-col justify-center items-center text-center p-4 sm:p-6 lg:p-8 pb-28 md:pb-32 relative overflow-hidden bg-white scroll-mt-20 list-none"
                 style={{ paddingTop: '2rem', listStyle: 'none' }}
             >
                 {/* Decorative elements - más sutiles */}
@@ -112,9 +92,9 @@ const HomePage: React.FC = () => {
 
                     {/* Título principal con gradiente */}
                     <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-dark-text animate-fade-in px-4 mb-6">
-                        <span className="block mb-2">I Simposio Internacional </span>
+                        <span className="block mb-2">I Simposio Internacional sobre</span>
                         <span className="block bg-gradient-to-r from-primary-gold via-yellow-500 to-primary-gold bg-clip-text text-transparent">
-                            sobre Biodiversidad y Biotecnología Vegetal
+                            Biodiversidad y Biotecnología Vegetal
                         </span>
                     </h1>
 
@@ -122,7 +102,7 @@ const HomePage: React.FC = () => {
                         <div className="relative">
                             <div className="absolute inset-0 bg-gradient-to-r from-primary-gold/20 to-yellow-600/20 blur-xl"></div>
                             <h2 className="relative text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-primary-gold via-yellow-500 to-yellow-700">
-                                "SIMBIOSIS"
+                                "SYMBIŌSIS 2026"
                             </h2>
                         </div>
                         <p className="text-sm sm:text-base text-gray-500 mt-2 font-medium tracking-wide">
@@ -140,7 +120,7 @@ const HomePage: React.FC = () => {
 
                     {/* Descripción breve */}
                     <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-10 animate-fade-in leading-relaxed px-4" style={{ animationDelay: '0.4s' }}>
-                        Únete a investigadores y estudiantes de todo el mundo en un encuentro único dedicado al futuro de la biodiversidad vegetal
+                        Únete a investigadores y estudiantes de todo el mundo en un encuentro único dedicado al futuro de la biodiversidad y las novedades de la biotecnología vegetal.
                     </p>
 
                     {/* CTAs */}
@@ -161,7 +141,7 @@ const HomePage: React.FC = () => {
                     {/* Stats o highlights */}
                     <div className="grid grid-cols-3 gap-4 sm:gap-8 max-w-2xl mx-auto mt-16 animate-fade-in" style={{ animationDelay: '0.6s' }}>
                         <div className="text-center">
-                            <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-gold mb-1">6</div>
+                            <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-gold mb-1">8</div>
                             <div className="text-xs sm:text-sm text-gray-600">Comisiones</div>
                         </div>
                         <div className="text-center border-x border-gray-200">
@@ -189,13 +169,15 @@ const HomePage: React.FC = () => {
                 {/* Information Key Cards */}
                 <AnimatedSection className="flex flex-col md:flex-row gap-4 sm:gap-6 px-4 sm:px-0">
                     <InfoCard icon={CalendarIcon} title="Fechas Importantes">
-                        <p><strong>Inscripciones:</strong> 15 Dic, 2025 - 15 Ene, 2026</p>
-                        <p><strong>Evento:</strong> 1 de Febrero, 2026</p>
+                        <p><strong>Inscripciones:</strong> 15 de febrero al 15 de abril</p>
                     </InfoCard>
                     <InfoCard icon={LocationMarkerIcon} title="Ubicación">
-                        <p>Hotel Meliá Varadero</p>
-                        <p>Varadero, Cuba</p>
-                        <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="text-secondary-blue font-semibold hover:underline">Ver mapa</a>
+                        <p>Edificio Varona</p>
+                        <p>Universidad de la Habana</p>
+                        <a href="https://maps.app.goo.gl/A2Rrh2tYeC1fn7bP8" target="_blank" rel="noopener noreferrer" className="text-secondary-blue font-semibold hover:underline flex items-center justify-center gap-1">
+                            <LocationMarkerIcon className="w-4 h-4" />
+                            Ver mapa
+                        </a>
                     </InfoCard>
                     <InfoCard icon={AwardIcon} title="Beneficios">
                         <p>Certificado de Participación</p>
@@ -216,44 +198,26 @@ const HomePage: React.FC = () => {
                 <AnimatedSection id="comisiones" className="px-4 sm:px-0">
 
                     <Accordion title="Comisiones del Simposio">
-                        <div className="space-y-6">
-                            <div>
-                                <h3 className="font-bold text-lg mb-2 text-dark-text flex items-center">
-                                    <span className="mr-2">🌿</span> Conservación de Biodiversidad
-                                </h3>
-                            </div>
-
-                            <div>
-                                <h3 className="font-bold text-lg mb-2 text-dark-text flex items-center">
-                                    <span className="mr-2">🧬</span> Biotecnología Vegetal
-                                </h3>
-                            </div>
-
-                            <div>
-                                <h3 className="font-bold text-lg mb-2 text-dark-text flex items-center">
-                                    <span className="mr-2">🌍</span> Cambio Climático
-                                </h3>
-
-                            </div>
-
-                            <div>
-                                <h3 className="font-bold text-lg mb-2 text-dark-text flex items-center">
-                                    <span className="mr-2">🌺</span> Etnobotánica
-                                </h3>
-                            </div>
-
-                            <div>
-                                <h3 className="font-bold text-lg mb-2 text-dark-text flex items-center">
-                                    <span className="mr-2">💻</span> Bioinformática
-                                </h3>
-
-                            </div>
-
-                            <div>
-                                <h3 className="font-bold text-lg mb-2 text-dark-text flex items-center">
-                                    <span className="mr-2">🌾</span> Agricultura Sostenible
-                                </h3>
-                            </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            {[
+                                { name: "Biología Animal", icon: BugIcon },
+                                { name: "Biología Vegetal", icon: LeafIcon },
+                                { name: "Funcionamiento de Ecosistemas, Medio Ambiente y Cambio Climático", icon: GlobeIcon },
+                                { name: "Biotecnología Vegetal", icon: ChainIcon },
+                                { name: "Potencialidades de Los Extractos Vegetales", icon: BeakerIcon },
+                                { name: "Optimización de Productos Vegetales", icon: TrendingUpIcon },
+                                { name: "Historia y Personalidades de la Biotecnología vegetal", icon: BookOpenIcon },
+                                { name: "Colegio Universitario", icon: AcademicCapIcon }
+                            ].map((commission, idx) => (
+                                <div key={idx} className="bg-white p-6 rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-lg hover:border-primary-gold group flex flex-col items-center text-center h-full">
+                                    <div className="bg-primary-gold/10 p-4 rounded-full mb-4 group-hover:bg-primary-gold group-hover:text-white transition-colors duration-300">
+                                        <commission.icon className="w-8 h-8 text-primary-gold group-hover:text-white transition-colors duration-300" />
+                                    </div>
+                                    <h3 className="font-bold text-gray-800 text-sm leading-tight group-hover:text-primary-gold transition-colors duration-300">
+                                        {commission.name}
+                                    </h3>
+                                </div>
+                            ))}
                         </div>
                     </Accordion>
                 </AnimatedSection>
@@ -298,7 +262,7 @@ const HomePage: React.FC = () => {
                     <p className="mb-8 text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">
                         El período de inscripción para el simposio finaliza pronto. Asegura tu lugar para ser parte de este encuentro científico único.
                     </p>
-                    <CountdownTimer targetDate="2026-01-15T23:59:59" />
+                    <CountdownTimer targetDate="2026-04-15T23:59:59" />
                     <Link
                         to="/register"
                         className="mt-10 inline-block bg-primary-gold text-white font-bold text-base sm:text-lg px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-lg hover:bg-yellow-700 transition-all transform hover:scale-105"
@@ -316,7 +280,7 @@ const HomePage: React.FC = () => {
                     </p>
                     <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
                         <a
-                            href="mailto:info@simposio.com"
+                            href="mailto:symbiosis.contacto12@gmail.com"
                             className="p-3 bg-gray-100 rounded-full hover:bg-primary-gold hover:text-white transition-all transform hover:scale-110 shadow-sm hover:shadow-md"
                             aria-label="Enviar correo electrónico"
                         >
@@ -340,8 +304,9 @@ const HomePage: React.FC = () => {
                         </a>
                     </div>
                     <div className="mt-8 text-gray-600 text-sm sm:text-base">
-                        <p><strong>Email:</strong> info@simposio.com</p>
-                        <p><strong>Teléfono:</strong> +53 123 456 789</p>
+                        <p><strong>Email:</strong> <br />symbiosis.contacto12@gmail.com</p>
+                        <br />
+                        <p><strong>Teléfonos:</strong> <br /> +5356680418 <br /> +5354547503 <br /> +5359390323</p>
                     </div>
                 </AnimatedSection>
 

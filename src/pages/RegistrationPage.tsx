@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { ChevronDownIcon } from '../components/icons/Icons';
 import { RegistrationData } from '../types';
 import { COMMISSIONS } from '../constants';
 
@@ -30,6 +31,24 @@ const RegistrationPage: React.FC = () => {
     const [apiError, setApiError] = useState<string>('');
     const [apiErrors, setApiErrors] = useState<string[]>([]);
     const [registrationId, setRegistrationId] = useState<number | null>(null);
+    const [isCommissionOpen, setIsCommissionOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Click outside listener for commission dropdown
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsCommissionOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const handleCommissionSelect = (value: string) => {
+        setFormData(prev => ({ ...prev, commission: value }));
+        setIsCommissionOpen(false);
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -128,6 +147,7 @@ const RegistrationPage: React.FC = () => {
                     setApiError(data.message || 'Error al procesar la solicitud.');
                 }
                 setStatus('error');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
                 return;
             }
 
@@ -153,6 +173,29 @@ const RegistrationPage: React.FC = () => {
 
         } catch (error) {
             console.error('Failed to submit registration:', error);
+
+            // SIMULATION FOR DEVELOPMENT (If backend is offline)
+            if (import.meta.env.DEV) {
+                console.warn("⚠️ DEV MODE: Backend unreachable. Simulating success for UI testing.");
+                setTimeout(() => {
+                    setStatus('success');
+                    setRegistrationId(Math.floor(Math.random() * 1000) + 1); // Random ID
+                    setFormData({
+                        fullName: '',
+                        email: '',
+                        institution: '',
+                        phone: '',
+                        commission: COMMISSIONS[0],
+                        workTitle: '',
+                        workSummary: '',
+                    });
+                    // Set a flag to show this was a simulation (optional, but good for clarity)
+                    setApiError('SIMULACIÓN: Backend no detectado (puerto 3000 cerrado). Se simuló un registro exitoso.');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 1000);
+                return;
+            }
+
             setApiError('Error de conexión. Por favor, verifica tu conexión a internet e inténtalo de nuevo.');
             setStatus('error');
         }
@@ -178,6 +221,11 @@ const RegistrationPage: React.FC = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
+                {apiError && apiError.includes('SIMULACIÓN') && (
+                    <div className="mb-6 bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-yellow-800 text-sm font-semibold">
+                        ⚠️ MODO PRUEBA: El backend no está conectado. Este es un registro simulado.
+                    </div>
+                )}
                 <h2 className="text-3xl font-bold text-primary-gold mb-4">¡Inscripción Exitosa!</h2>
                 <p className="text-gray-600 mb-2">Gracias por inscribirte. Hemos recibido tus datos correctamente.</p>
                 {registrationId && (
@@ -185,11 +233,6 @@ const RegistrationPage: React.FC = () => {
                         Número de registro: <span className="font-bold text-primary-gold">#{registrationId}</span>
                     </p>
                 )}
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                    <p className="text-sm text-blue-800">
-                        📧 Recibirás un correo de confirmación en breve con los detalles de tu inscripción.
-                    </p>
-                </div>
                 <button
                     onClick={handleNewRegistration}
                     className="bg-primary-gold text-white font-bold px-6 py-3 rounded-lg hover:bg-yellow-600 transition-all shadow-md hover:shadow-lg"
@@ -268,7 +311,7 @@ const RegistrationPage: React.FC = () => {
                                 onChange={handleChange}
                                 required
                                 className={inputClasses(!!errors.email)}
-                                placeholder="ejemplo@universidad.edu"
+                                placeholder="ejemplo@gmail.com"
                             />
                             {errors.email && (
                                 <p className="mt-1 text-sm text-red-500 flex items-center">
@@ -293,7 +336,7 @@ const RegistrationPage: React.FC = () => {
                                 onChange={handleChange}
                                 required
                                 className={inputClasses(!!errors.institution)}
-                                placeholder="Ej: Universidad Nacional"
+                                placeholder="Universidad ... Facultad .."
                             />
                             {errors.institution && (
                                 <p className="mt-1 text-sm text-red-500 flex items-center">
@@ -317,26 +360,54 @@ const RegistrationPage: React.FC = () => {
                                 value={formData.phone}
                                 onChange={handleChange}
                                 className={inputClasses(false)}
-                                placeholder="+52 123 456 7890"
+                                placeholder="+5312345678"
                             />
                         </div>
 
                         {/* Comisión */}
-                        <div>
-                            <label htmlFor="commission" className="block text-sm font-medium text-gray-700">
+                        <div ref={dropdownRef} className="relative">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Área Temática <span className="text-red-500">*</span>
                             </label>
-                            <select
-                                id="commission"
-                                name="commission"
-                                value={formData.commission}
-                                onChange={handleChange}
-                                className={inputClasses(false)}
+
+                            <button
+                                type="button"
+                                onClick={() => setIsCommissionOpen(!isCommissionOpen)}
+                                className={`relative w-full bg-white border ${isCommissionOpen ? 'border-primary-gold ring-2 ring-primary-gold' : 'border-gray-300'
+                                    } rounded-lg shadow-sm pl-4 pr-10 py-3 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-primary-gold focus:border-primary-gold sm:text-sm transition-all duration-200`}
                             >
-                                {COMMISSIONS.map(c => (
-                                    <option key={c} value={c}>{c}</option>
-                                ))}
-                            </select>
+                                <span className="block truncate text-dark-text">{formData.commission}</span>
+                                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                    <ChevronDownIcon
+                                        className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${isCommissionOpen ? 'transform rotate-180' : ''}`}
+                                        aria-hidden="true"
+                                    />
+                                </span>
+                            </button>
+
+                            {isCommissionOpen && (
+                                <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm animate-fade-in">
+                                    {COMMISSIONS.map((commission) => (
+                                        <div
+                                            key={commission}
+                                            className={`cursor-pointer select-none relative py-3 pl-4 pr-9 hover:bg-primary-gold/10 transition-colors ${formData.commission === commission ? 'text-primary-gold font-bold bg-primary-gold/5' : 'text-gray-900'
+                                                }`}
+                                            onClick={() => handleCommissionSelect(commission)}
+                                        >
+                                            <span className="block truncate">
+                                                {commission}
+                                            </span>
+                                            {formData.commission === commission && (
+                                                <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-primary-gold">
+                                                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                    </svg>
+                                                </span>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         {/* Título del Trabajo */}

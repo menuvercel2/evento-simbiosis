@@ -7,6 +7,8 @@ import HomePage from './pages/HomePage';
 import RegistrationPage from './pages/RegistrationPage';
 import GroupsPage from './pages/GroupsPage';
 
+import RegistrationListPage from './pages/RegistrationListPage';
+
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
@@ -19,12 +21,13 @@ function App() {
       <div className="min-h-screen font-sans flex flex-col">
         <Header onMenuClick={toggleSidebar} />
         <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
-        <main className="flex-grow transition-all duration-300 ease-in-out md:pl-64 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/register" element={<RegistrationPage />} />
-                <Route path="/groups" element={<GroupsPage />} />
-            </Routes>
+        <main className="flex-grow transition-all duration-300 ease-in-out pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/register" element={<RegistrationPage />} />
+            <Route path="/groups" element={<GroupsPage />} />
+            <Route path="/lista" element={<RegistrationListPage />} />
+          </Routes>
         </main>
         <Footer />
       </div>

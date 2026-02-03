@@ -7,10 +7,12 @@ export const NAV_LINKS: NavLinkItem[] = [
 ];
 
 export const COMMISSIONS: string[] = [
-    'Biología Molecular y Celular',
-    'Genética y Epigenética',
-    'Biología del Desarrollo y Células Madre',
-    'Neurobiología y Comportamiento',
-    'Bioinformática y Biología Computacional',
-    'Ecología y Evolución',
+    'Biología Animal',
+    'Biología Vegetal',
+    'Funcionamiento de Ecosistemas, Medio Ambiente y Cambio Climático',
+    'Biotecnología Vegetal',
+    'Potencialidades de Los Extractos Vegetales',
+    'Optimización de Productos Vegetales',
+    'Historia y Personalidades de la Biotecnología vegetal',
+    'Colegio Universitario'
 ];

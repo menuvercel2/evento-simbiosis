@@ -15,7 +15,7 @@ const ICONS: { [key: string]: React.ElementType } = {
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
-    const baseClasses = "fixed top-0 left-0 h-full w-64 bg-white shadow-lg border-r border-gray-200 z-50 transform transition-transform duration-300 ease-in-out md:translate-x-0";
+    const baseClasses = "fixed top-0 left-0 h-full w-64 bg-white shadow-lg border-r border-gray-200 z-50 transform transition-transform duration-300 ease-in-out";
     const closedClasses = "-translate-x-full";
 
     const activeLinkClasses = "bg-primary-gold/10 text-primary-gold font-semibold";
@@ -25,7 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     return (
         <>
             <div
-                className={`fixed inset-0 bg-black bg-opacity-40 z-40 transition-opacity md:hidden ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                className={`fixed inset-0 bg-black bg-opacity-40 z-40 transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                 onClick={onClose}
                 aria-hidden="true"
             ></div>
@@ -40,7 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                         />
                         <h2 className="text-lg font-bold text-dark-text">SIMBIOSIS</h2>
                     </div>
-                    <button onClick={onClose} className="p-2 rounded-full text-gray-500 hover:bg-gray-100 md:hidden">
+                    <button onClick={onClose} className="p-2 rounded-full text-gray-500 hover:bg-gray-100">
                         <XIcon className="h-6 w-6" />
                     </button>
                 </div>

@@ -10,16 +10,16 @@ const groups = [
     },
     {
         name: 'GCE Hibiscus',
-        description: 'Grupo Científico Estudiantil vinculado al Jardín Botánico Nacional se dedica al estudio de plantas, hongos y microorganismos de potencial interés. Desarrolla investigaciones enfocadas en la biodiversidad vegetal y fúngica, explorando sus aplicaciones y características relevantes. Trabaja en estrecha colaboración con las instalaciones y recursos del Jardín Botánico para sus actividades científicas',
+        description: 'Grupo Científico Estudiantil vinculado al Jardín Botánico Nacional dedicado al estudio de la biodiversidad animal y vegetal. Desarrolla actividades enfocadas en estudios de biodiversidad, además de actividades de extensión universitaria principalmente con la comunidad. Trabaja en estrecha relación con entidades del sector biológico y ambiental de Cuba.',
         image: '/public/hibiscus.png',
-        instagram: 'https://www.instagram.com/hibiscus_fbiouh?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=='
+        instagram: 'https://www.instagram.com/hibiscus_fbiouh'
     }
 ];
 
 const GroupsPage: React.FC = () => {
     return (
-        <div className="animate-fade-in-up space-y-16">
-            <h1 className="text-3xl sm:text-4xl font-bold text-center text-dark-text">Grupos de Investigación Participantes</h1>
+        <div className="animate-fade-in-up space-y-16 max-w-7xl mx-auto">
+            <h1 className="text-3xl sm:text-4xl font-bold text-center text-dark-text">Grupos de Investigación Organizadores</h1>
 
             <div className="space-y-12">
                 {groups.map((group, index) => (
