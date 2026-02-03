@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronDownIcon } from '../components/icons/Icons';
+import { utils, writeFile } from 'xlsx';
 
 interface Registration {
     id: number;
@@ -61,35 +62,26 @@ const RegistrationListPage: React.FC = () => {
     };
 
     const downloadExcel = () => {
-        // Create CSV content
-        const headers = ['ID', 'Nombre', 'Email', 'Institución', 'Teléfono', 'Comisión', 'Título del Trabajo', 'Resumen', 'Fecha Registro'];
+        // Prepare data for Excel
+        const data = filteredRegistrations.map(r => ({
+            'ID': r.id,
+            'Nombre': r.full_name,
+            'Email': r.email,
+            'Institución': r.institution,
+            'Teléfono': r.phone || '-',
+            'Comisión': r.commission_name,
+            'Título del Trabajo': r.work_title,
+            'Resumen': r.work_summary,
+            'Fecha Registro': new Date(r.created_at).toLocaleDateString()
+        }));
 
-        const csvContent = [
-            headers.join(','),
-            ...registrations.map(r => [
-                r.id,
-                `"${r.full_name}"`,
-                `"${r.email}"`,
-                `"${r.institution}"`,
-                `"${r.phone || '-'}"`,
-                `"${r.commission_name}"`,
-                `"${r.work_title.replace(/"/g, '""')}"`, // Escape quotes
-                `"${r.work_summary.replace(/"/g, '""').replace(/\n/g, ' ')}"`, // Escape quotes and newlines
-                `"${new Date(r.created_at).toLocaleDateString()}"`
-            ].join(','))
-        ].join('\n');
+        // Create workbook and worksheet
+        const ws = utils.json_to_sheet(data);
+        const wb = utils.book_new();
+        utils.book_append_sheet(wb, ws, "Inscripciones");
 
-        // Create blob and download link
-        const blob = new Blob([`\ufeff${csvContent}`], { type: 'text/csv;charset=utf-8;' }); // Add BOM for Excel
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-
-        link.setAttribute('href', url);
-        link.setAttribute('download', `inscripciones_simbiosis_${new Date().toISOString().split('T')[0]}.csv`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // Save file
+        writeFile(wb, `inscripciones_simbiosis_${new Date().toISOString().split('T')[0]}.xlsx`);
     };
 
     const uniqueCommissions = ['Todas', ...new Set(registrations.map(r => r.commission_name))];
