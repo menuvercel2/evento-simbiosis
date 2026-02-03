@@ -5,13 +5,13 @@ const groups = [
     {
         name: 'GCE KARYON',
         description: 'Grupo Científico Estudiantil de la Facultad de Biología de la Universidad de La Habana que combina investigación y extensión universitaria. Trabaja en líneas como neurociencias, conservación animal, potencialidades biomédicas de extractos vegetales, bioinformática y microorganismos.',
-        image: '/public/karyon.png',
+        image: '/karyon.png',
         instagram: 'https://www.instagram.com/karyon_fbio?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=='
     },
     {
         name: 'GCE Hibiscus',
         description: 'Grupo Científico Estudiantil vinculado al Jardín Botánico Nacional dedicado al estudio de la biodiversidad animal y vegetal. Desarrolla actividades enfocadas en estudios de biodiversidad, además de actividades de extensión universitaria principalmente con la comunidad. Trabaja en estrecha relación con entidades del sector biológico y ambiental de Cuba.',
-        image: '/public/hibiscus.png',
+        image: '/hibiscus.png',
         instagram: 'https://www.instagram.com/hibiscus_fbiouh'
     }
 ];
