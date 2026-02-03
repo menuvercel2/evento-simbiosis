@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ChainIcon, ChevronDownIcon } from '../components/icons/Icons';
+import { ChevronDownIcon } from '../components/icons/Icons';
 
 interface Registration {
     id: number;
